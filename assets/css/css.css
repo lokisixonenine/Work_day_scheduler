@@ -36,11 +36,19 @@ textarea{
   border-top: 1px solid white;;
 }
 
-.hour {
+/*.hour {
   background-color: #ffffff;
   color: #000000;
   border-top: 1px dashed #000000;
+} */
+.hour {
+  
+  color: chrome;
+  border-top: 1px black;
+  padding: 10px;
+  padding-top: 30px;
 }
+
 
 .past {
   background-color: #d3d3d3;
@@ -57,7 +65,7 @@ textarea{
   color: #000;
 }
 
-.saveBtn {
+.saveButton {
   border-left: 1px solid black;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
@@ -65,7 +73,7 @@ textarea{
   color: white;
 }
 
-.saveBtn i:hover {
+.saveButton i:hover {
   font-size: 20px;
   transition: all .3s ease-in-out;
 }
