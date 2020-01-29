@@ -22,7 +22,7 @@ WHEN I refresh the page
 THEN the saved events persist
 The following animation demonstrates the application functionality:
 
-D/EV NOTES:
+DEV NOTES:
 1/29/2020:  Created index.html
             Created subfolders asset, js, and css
             Created js.js
