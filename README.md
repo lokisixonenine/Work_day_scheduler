@@ -1,4 +1,5 @@
 # Work_day_scheduler
+Homework for UCSD Boot Camp:
 
 User Story
 AS AN employee with a busy schedule
@@ -20,3 +21,8 @@ THEN the text for that event is saved in local storage
 WHEN I refresh the page
 THEN the saved events persist
 The following animation demonstrates the application functionality:
+
+D/EV NOTES:
+1/29/2020:  Created index.html
+            Created subfolders asset, js, and css
+            Created js.js
