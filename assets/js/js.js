@@ -38,25 +38,30 @@ switch (date) {
 let today = `${day}, ${month} ${date}`;
 $('#currentDay').text(today);
 
+/**
+ * 
+ * @param {*} hour
+*/
+
 // Function that checks the past, present, or future
  
-const coloredTextArea = (hour, savedAppts) => {
+const colorCodedtextArea = (hour, savedAppts) => {
 
   const currentHR = moment().hour();
-  let textBlock = '';
+  let textArea = '';
   let item = '';
 
   savedAppts ? savedAppts[hour] ? item = savedAppts[hour] : item : item;
 
   currentHR > hour ?
-    textBlock = `<textarea id="${hour}" class="col-10 row past" rows="3">${item}</textarea>`
+    textArea = `<textarea id="${hour}" class="col-10 row past" rows="3">${item}</textarea>`
     :
     currentHR === hour ?
-      textBlock = `<textarea id="${hour}" class="col-10 row present" rows="3">${item}</textarea>`
+      textArea = `<textarea id="${hour}" class="col-10 row present" rows="3">${item}</textarea>`
       :
-      textBlock = `<textarea id="${hour}" class="col-10 row future" rows="3">${item}</textarea>`
+      textArea = `<textarea id="${hour}" class="col-10 row future" rows="3">${item}</textarea>`
 
-  return textBlock;
+  return textArea;
 }
 
 // Accessing/getting localStorage
@@ -77,19 +82,19 @@ for (let index = 9; index < 18; index++) {
   index < 12 ?
     am += 
     `<div class="col-1 hour">${index}AM</div>
-    ${coloredTextArea(index, items)}
+    ${colorCodedtextArea(index, items)}
     <button class="col-1 saveBtn" data-target="${index}"><i class="fas fa-save"></i></button>`
 // Noon
   : (index === 12) ?
     noon = 
     `<div class="col-1 hour">12PM</div>
-    ${coloredTextArea(index, items)}
+    ${colorCodedtextArea(index, items)}
     <button class="col-1 saveBtn" data-target="${index}"><i class="fas fa-save"></i></button>`
   :
 // PM
   afternoon +=
   `<div class="col-1 hour">${index - 12}PM</div>
-  ${coloredTextArea(index - 12, items)}
+  ${colorCodedtextArea(index - 12, items)}
   <button class="col-1 saveBtn" data-target="${index - 12}"><i class="fas fa-save"></i></button>`
 }
 
