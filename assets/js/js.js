@@ -1,130 +1,70 @@
-// Declaring variables/constructing arrays
-const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+$(document).ready(function () {
 
-// Setting the day for the date displayed in the jumbotron
-let varDay = moment().day();
-let day = days[varDay];
+    var todaysDate = moment().format('MMMM D, YYYY<br>h:mm a');
+    var todaysTime = moment().format("HH");
 
-// Setting the month for the date displayed in the jumbotron
-let varMonth = moment().month();
-let month = months[varMonth];
+    var timeArray = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+    var workDay = [9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7];
+    var numericalS = ["nine", "ten", "eleven", "twelve", "one", "two", "three", "four", "five", "six", "seven"];
 
-// Setting the suffix for the numerical value of time or date (i.e. 1st, 2nd, 3rd, etc.) in the jumbotron
-let date = moment().date();
-switch (date) {
-  case 1:
-    date += 'st';
-    break;
-  case 2:
-    date += 'nd';
-    break;
-  case 3:
-    date += 'rd';
-    break;
-  case 21:
-    date += 'st';
-  case 22:
-    date += 'nd';
-    break;
-  case 23:
-    date += 'rd';
-    break;
-  default:
-    date += 'th';
-    break;
-}
+    $("#currentDay").append(todaysDate);
+  
+    for (var i = 0; i < workDay.length; i++) {
+        var nextRow = $("<row>");
+        $(".container").append(nextRow);
+        var column1 = $("<col>");
+        var column2 = $("<col>");
+        nextRow.append(column1, column2);
+        column1.attr("class", "col-2 hour");
+        column2.attr("class", "col-9 input");
+        column2.attr("id", numericalS[i]);
+        column2.html("<textarea rows='3'style='width: 100%; margin-left:-2rem; height: 100%'></textarea>");
+        nextRow.addClass("time-block row");
+        nextRow.attr("id", timeArray[i]);
+        var newBtn = $("<button>");
+        newBtn.attr("id", workDay[i]);
+        newBtn.attr("class", "saveButton fas fa-save col-1");
+        nextRow.append(newBtn);
+        if (workDay[i] === 12) {
+            column1.text(workDay[i] + "PM");
+        } else if (workDay[i] > 8) {
+            column1.text(workDay[i] + "AM");
+        } else { column1.text(workDay[i] + "PM") };
+    }
 
-let today = `${day}, ${month} ${date}`;
-$('#currentDay').text(today);
+    $("row").each(function () {
+        var getID = parseInt($(this).attr("id"));
+        console.log("id= " + getID);
 
-/**
- * 
- * @param {*} hour
-*/
+        if (parseInt(todaysTime) < 9 || parseInt(todaysTime) > 19) {
+            $(this).addClass("past");
+        } if (getID < parseInt(todaysTime)) {
+            $(this).addClass("past");
+        } if (getID > parseInt(todaysTime)) {
+            $(this).addClass("future");
+        } if (getID === parseInt(todaysTime)) {
+            $(this).addClass("present");
 
-// Function that checks the past, present, or future
- 
-const colorCodedtextArea = (hour, savedAppts) => {
+        }
 
-  const currentHR = moment().hour();
-  let textArea = '';
-  let item = '';
+    })
 
-  savedAppts ? savedAppts[hour] ? item = savedAppts[hour] : item : item;
+    var saveButton = $(".saveButton");
+    saveButton.on("click", function (event) {
+        event.preventDefault();
+        console.log($(this).attr("id"));
+        console.log($(this).siblings(".input").children("textarea"));
+        console.log($(this).siblings(".input").children("textarea").val());
 
-  currentHR > hour ?
-    textArea = `<textarea id="${hour}" class="col-10 row past" rows="3">${item}</textarea>`
-    :
-    currentHR === hour ?
-      textArea = `<textarea id="${hour}" class="col-10 row present" rows="3">${item}</textarea>`
-      :
-      textArea = `<textarea id="${hour}" class="col-10 row future" rows="3">${item}</textarea>`
+        var hour = $(this).attr("id");
+        var note = $(this).siblings(".input").children("textarea").val();
 
-  return textArea;
-}
+        localStorage.setItem(hour, note);
+    })
 
-// Accessing/getting localStorage
-const items = JSON.parse(localStorage.getItem('items'));
-
-// Div with rows 
-const row = $('<div>');
-row.addClass('row time-slot');
-
-let am = '';
-let noon = '';
-let afternoon = '';
-
-// for loop to establish time of day (i.e. am, noon, or pm)
-for (let index = 9; index < 18; index++) {
-
-// AM
-  index < 12 ?
-    am += 
-    `<div class="col-1 hour">${index}AM</div>
-    ${colorCodedtextArea(index, items)}
-    <button class="col-1 saveBtn" data-target="${index}"><i class="fas fa-save"></i></button>`
-// Noon
-  : (index === 12) ?
-    noon = 
-    `<div class="col-1 hour">12PM</div>
-    ${colorCodedtextArea(index, items)}
-    <button class="col-1 saveBtn" data-target="${index}"><i class="fas fa-save"></i></button>`
-  :
-// PM
-  afternoon +=
-  `<div class="col-1 hour">${index - 12}PM</div>
-  ${colorCodedtextArea(index - 12, items)}
-  <button class="col-1 saveBtn" data-target="${index - 12}"><i class="fas fa-save"></i></button>`
-}
-
-// appended time slots with am, pm, and noon
-row.append(am);
-row.append(noon);
-row.append(afternoon);
-$('.container').append(row);
-
-// add event listners to buttons so that they save scheduled items to localStorage
-$('.saveBtn').on('click', function(event) {
-  event.preventDefaultTime();
-  console.log('clicked');
-  const id = $(this).attr('data-target');
-  const item = $('#' + id).val();
-  saveToLocalStorage(id, item);
+    for (let i=0; i < workDay.length; i++) {
+    $("#"+numericalS[i]).children("textarea").text(localStorage.getItem(workDay[i]));
+    }
 })
 
 
-// saves schedule to localStorage
-const saveToLocalStorage = (id, item) => {
-
-  if(localStorage.items) {
-    const items = JSON.parse(localStorage.getItem('items'));
-    items[id] = item;
-    localStorage.setItem('items', JSON.stringify(items));
-  } else {
-    const items = {};
-    items[id] = item;
-    localStorage.setItem('items', JSON.stringify(items));
-  }
-
-}
